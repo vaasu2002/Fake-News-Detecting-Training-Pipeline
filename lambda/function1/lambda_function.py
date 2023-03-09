@@ -6,7 +6,10 @@ import numpy as np
 import boto3
 
 BUCKET_NAME = os.getenv("BUCKET_NAME")
-
+DATABASE_NAME = os.getenv("DATABASE_NAME")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME")
+BUCKET_NAME = os.getenv("BUCKET_NAME")
+MONGODB_URL = os.getenv("MONGODB_URL")
 
 s3 = boto3.resource('s3')
 
