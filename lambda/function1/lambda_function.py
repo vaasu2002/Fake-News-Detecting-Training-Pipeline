@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 import datetime
 import numpy as np
+import pymongo
 import boto3
 
 BUCKET_NAME = os.getenv("BUCKET_NAME")
@@ -12,6 +13,8 @@ BUCKET_NAME = os.getenv("BUCKET_NAME")
 MONGODB_URL = os.getenv("MONGODB_URL")
 
 s3 = boto3.resource('s3')
+
+client = pymongo.MongoClient(MONGODB_URL)
 
 def extract_fake_news():
 
@@ -26,7 +29,7 @@ def extract_fake_news():
         soup = BeautifulSoup(req.content, 'html.parser')
         total_pages = soup.find('span',class_= 'pages').get_text()[-3:]
 
-        for page in range(1, int(total_pages)):
+        for page in range(1, len(total_pages)+1):
             pg = requests.get(f"https://dfrac.org/en/topic/{type_}/page/{page}/")
             cnt = pg.content
             soup = BeautifulSoup(cnt, 'html.parser')
@@ -68,17 +71,45 @@ def extract_fake_news():
             "from_date" : from_date
         }
 
+def save_from_date_to_date(data, status=True):
+    data.update({"status": status})
+    client[DATABASE_NAME][COLLECTION_NAME].insert_one(data)
+    
 
 def lambda_handler(event, context):
 
     df, to_date, from_date = extract_fake_news().values()
 
-    s3object = s3.Object(BUCKET_NAME,f"inbox/{from_date.replace('-','_')}_{to_date.replace('-','_')}_dfrac.json")
+    res = client[DATABASE_NAME][COLLECTION_NAME].find_one(sort=[("to_date",pymongo.DESCENDING)])
 
+    if res is not None:
+        date_from_db = res["to_date"]
+
+    # df.to_json(f"{from_date.replace('-','_')}_{to_date.replace('-','_')}_dfrac.json") 
+
+    if(from_date==date_from_db):
+        return {
+        'statusCode': 200,
+        'body': json.dumps('Pipeline has already downloaded up to date data')
+        }
+
+    df = df[df['Date'] > date_from_db]
+
+    if(len(df)==0):
+        return {
+        'statusCode': 200,
+        'body': json.dumps('Pipeline has already downloaded up to date data')
+        }
+
+    json_string = df.to_json()
+
+    s3object = s3.Object(BUCKET_NAME,f"inbox/{date_from_db.replace('-','_')}_{to_date.replace('-','_')}_dfrac.json")
 
     s3object.put(
-        Body=(bytes(json.dumps(df).encode('UTF-8')))
+        Body=bytes(json_string.encode('UTF-8'))
     )
+
+    save_from_date_to_date({"from_date": date_from_db, "to_date": to_date})
 
     return {
         'statusCode': 200,
