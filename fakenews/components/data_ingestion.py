@@ -5,7 +5,7 @@ from fakenews.entity.artifact_entity import DataIngestionArtifact
 
 from pandas import DataFrame
 from fakenews.data_access.get_data import NewsData
-from fakenews.utils.main_utils import read_yaml_file
+from fakenews.utils import read_yaml_file
 from fakenews.constant.training_pipeline import SCHEMA_FILE_PATH
 
 from sklearn.model_selection import train_test_split
