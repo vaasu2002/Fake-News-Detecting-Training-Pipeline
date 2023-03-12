@@ -2,7 +2,7 @@ import certifi
 import pymongo
 from dotenv import load_dotenv
 load_dotenv()  
-from sensor.constant.database import DATABASE_NAME
+from fakenews.constant.database import DATABASE_NAME
 
 ca = certifi.where()
 
