@@ -1,10 +1,10 @@
 from fakenews.exception import FakeNewsException
 from fakenews.logger import logging
-from fakeNews.entity.config_entity import DataIngestionConfig
-from fakeNews.entity.artifact_entity import DataIngestionArtifact
+from fakenews.entity.config_entity import DataIngestionConfig
+from fakenews.entity.artifact_entity import DataIngestionArtifact
 
 from pandas import DataFrame
-from fakenews.get_data.sensor_data import SensorData
+from fakenews.data_access.get_data import NewsData
 from fakenews.utils.main_utils import read_yaml_file
 from fakenews.constant.training_pipeline import SCHEMA_FILE_PATH
 

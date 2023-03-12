@@ -2,7 +2,6 @@ import sys
 from typing import Optional
 import numpy as np
 import pandas as pd
-
 from fakenews.configuration.mongo_db_connection import MongoDBClient
 from fakenews.constant.database import DATABASE_NAME,COLLECTION_NAME
 from fakenews.exception import FakeNewsException
