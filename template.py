@@ -30,6 +30,8 @@ list_of_files = [
     f"{project_name}/constant/__init__.py",
     f"{project_name}/data_access/__init__.py",
     f"{project_name}/entity/__init__.py",
+    f"{project_name}/entity/config_entity.py",
+    f"{project_name}/entity/artifact_entity.py",
     f"{project_name}/ml/__init__.py",
     f"{project_name}/pipeline/__init__.py",
     f"{project_name}/pipeline/prediction.py",
