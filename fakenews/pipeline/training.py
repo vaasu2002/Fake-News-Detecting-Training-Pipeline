@@ -4,7 +4,7 @@ from fakenews.exception import FakeNewsException
 import sys,os
 from fakenews.logger import logging
 from fakenews.components.data_ingestion import DataIngestion
-from fakenews.components.data_validation import DataValidation
+# from fakenews.components.data_validation import DataValidation
 
 
 
