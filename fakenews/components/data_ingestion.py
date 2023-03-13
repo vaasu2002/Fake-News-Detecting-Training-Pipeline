@@ -16,6 +16,7 @@ class DataIngestion:
 
     def __init__(self,data_ingestion_config:DataIngestionConfig):
         try:
+            super().__init__()
             self.data_ingestion_config=data_ingestion_config
             self._schema_config = read_yaml_file(SCHEMA_FILE_PATH)
         except Exception as e:
