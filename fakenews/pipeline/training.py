@@ -18,13 +18,13 @@ class TrainPipeline:
 
         try:
             
-            logging.info("Starting data ingestion")
+            logging.info("Starting Data Ingestion")
 
             data_ingestion = DataIngestion(data_ingestion_config=self.data_ingestion_config)
 
             data_ingestion_artifact=data_ingestion.initiate_data_ingestion()
 
-            logging.info(f"Data ingestion completed and artifact {data_ingestion_artifact}")
+            logging.info(f"Data Ingestion completed. The artifact location:- {data_ingestion_artifact}")
 
             return data_ingestion_artifact
 
@@ -33,7 +33,7 @@ class TrainPipeline:
     
     def run_pipeline(self):
         try:
-
+            logging.info(f"Starting re-training pipeline")
             data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
 
         except Exception as e:
