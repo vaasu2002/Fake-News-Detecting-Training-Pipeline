@@ -1,8 +1,7 @@
 import certifi
 import os
 import pymongo
-from dotenv import load_dotenv
-load_dotenv()  
+
 from fakenews.constant.database import DATABASE_NAME
 MONGODB_URL_KEY = "mongodb+srv://vaasubisht2021:gFS7waCLecumTpV7@cluster0.qcixkpq.mongodb.net/test"
 ca = certifi.where()
