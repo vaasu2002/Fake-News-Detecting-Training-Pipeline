@@ -17,7 +17,7 @@ from fakenews.exception import FakeNewsException
 from fakenews.logger import logging
 from fakenews.ml.model.estimator import TargetValueMapping
 from fakenews.ml.model.cleaning import nltk_preprocess
-# from fakenews.utils.main_utils import save_numpy_array_data, save_object
+from fakenews.utils.main_utils import save_numpy_array_data, save_object
 
 class DataTransformation:
     def __init__(self,data_validation_artifact:DataValidationArtifact,
