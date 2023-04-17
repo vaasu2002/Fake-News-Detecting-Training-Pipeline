@@ -27,16 +27,16 @@ def extract_fake_news():
         link = f"https://dfrac.org/en/topic/{type_}/page/1/"
         req = requests.get(link)
         soup = BeautifulSoup(req.content, 'html.parser')
-        total_pages = soup.find('span',class_= 'pages').get_text()[-3:]
+        total_pages = soup.find('span',class_= 'page-numbers').get_text()[-3:]
 
         for page in range(1, len(total_pages)+1):
             pg = requests.get(f"https://dfrac.org/en/topic/{type_}/page/{page}/")
             cnt = pg.content
             soup = BeautifulSoup(cnt, 'html.parser')
-            headlines = soup.find_all('div', class_= 'td-module-meta-info')
+            headlines = soup.find_all('div', class_= 'read-title')
             for headline in headlines:
                 try:
-                    title = headline.find('h3').get_text()
+                    title = headline.find('h4').get_text()
                     title = title.strip()
                     title = title.replace("- Read Fact Check", "").replace(" Read- Fact Check", "").replace("Read, Fact-Check", "").replace("Fact Check: ", "").replace(" Read Fact Check", "").replace("Fact Check-", "").replace('FactCheck:', '').replace('Fact-Check: ', '')
                     title = title.strip()
