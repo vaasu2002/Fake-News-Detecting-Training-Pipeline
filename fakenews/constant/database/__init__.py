@@ -1,2 +1,2 @@
 DATABASE_NAME = "Main"
-COLLECTION_NAME = "dataset"
+COLLECTION_NAME = "news_dataset"
