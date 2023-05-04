@@ -3,6 +3,7 @@ pymongo[srv]
 boto3
 pandas
 imblearn
+nltk
 dill
 pyyaml
 requests
