@@ -1,10 +1,11 @@
-from fakenews.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig
-from fakenews.entity.artifact_entity import DataIngestionArtifact
+from fakenews.entity.config_entity import TrainingPipelineConfig,DataIngestionConfig,DataTransformationConfig
+from fakenews.entity.artifact_entity import DataIngestionArtifact,DataTransformationArtifact
 from fakenews.exception import FakeNewsException
 import sys,os
 from fakenews.logger import logging
 from fakenews.components.data_ingestion import DataIngestion
-# from fakenews.components.data_validation import DataValidation
+from fakenews.components.data_transformation import DataTransformation
+# from fakenews.components.data_transformation import 
 
 
 
@@ -13,6 +14,7 @@ class TrainPipeline:
 
         self.training_pipeline_config = TrainingPipelineConfig()
         self.data_ingestion_config = DataIngestionConfig(training_pipeline_config=self.training_pipeline_config)
+        self.data_transformation_config = DataTransformationConfig(training_pipeline_config=self.training_pipeline_config)
     
     def start_data_ingestion(self)->DataIngestionArtifact:
 
@@ -31,10 +33,32 @@ class TrainPipeline:
         except Exception as e:
             raise FakeNewsException(e,sys)
     
+
+
+    def start_data_transformation(self)->DataTransformationArtifact:
+
+        try:
+            
+            logging.info("Starting Data Transformation")
+
+            data_transformation = DataTransformation(data_ingestion_config=self.data_ingestion_config, data_transformation_config=self.data_transformation_config)
+
+            data_transformation_artifact = data_transformation.initiate_data_transformation()
+
+            logging.info(f"Data Transformation completed. The artifact location:- {data_transformation_artifact}")
+
+            return data_transformation_artifact
+
+        except Exception as e:
+            raise FakeNewsException(e,sys)
+    
+
+
     def run_pipeline(self):
         try:
             logging.info(f"Starting re-training pipeline")
             data_ingestion_artifact:DataIngestionArtifact = self.start_data_ingestion()
+            data_transformation_artifact:DataTransformationArtifact = self.start_data_transformation()
 
         except Exception as e:
             raise FakeNewsException(e,sys)  
