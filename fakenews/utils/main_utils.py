@@ -40,4 +40,4 @@ def load_object(file_path: str, ) -> object:
         with open(file_path, "rb") as file_obj:
             return dill.load(file_obj)
     except Exception as e:
-        raise FakeNewsException(e, sys) from 
+        raise FakeNewsException(e, sys) 
