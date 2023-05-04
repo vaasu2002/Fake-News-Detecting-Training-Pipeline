@@ -8,7 +8,7 @@ from sklearn.pipeline import Pipeline
 from fakenews.constant.training_pipeline import TARGET_COLUMN
 from fakenews.entity.artifact_entity import (
     DataTransformationArtifact,
-    DataValidationArtifact
+    DataIngestionArtifact,
 )
 
 from sklearn.feature_extraction.text import CountVectorizer
@@ -20,17 +20,17 @@ from fakenews.ml.model.cleaning import nltk_preprocess
 from fakenews.utils.main_utils import save_numpy_array_data, save_object
 
 class DataTransformation:
-    def __init__(self,data_validation_artifact:DataValidationArtifact,
+    def __init__(self,data_ingestion_config:DataIngestionArtifact,
                 data_transformation_config:DataTransformationConfig):
-
-        """ Creating the data transformation component of pipeline
+        """
+            Creating the data transformation component of pipeline
             according to the flowchart.
             Args:
                 self (object): Output reference of data ingestion artifact stage
                 self (object): Configuration for data transformation
         """
         try:
-            self.data_validation_artifact = data_validation_artifact
+            self.data_validation_artifact = data_ingestion_config
             self.data_transformation_config = data_transformation_config
         except Exception as e:
             raise FakeNewsException(e, sys)
@@ -68,8 +68,14 @@ class DataTransformation:
 
     def initiate_data_transformation(self,) -> DataTransformationArtifact:
         try:
-            train_df = DataTransformation.read_data(self.data_validation_artifact.valid_train_file_path) 
-            test_df = DataTransformation.read_data(self.data_validation_artifact.valid_test_file_path)
+            # train_df = DataTransformation.read_data(self.data_validation_artifact.valid_train_file_path) 
+            # test_df = DataTransformation.read_data(self.data_validation_artifact.valid_test_file_path)
+
+            train_df = DataTransformation.read_data(self.data_validation_artifact.training_file_path) 
+            test_df = DataTransformation.read_data(self.data_validation_artifact.testing_file_path)
+
+
+
             preprocessor_pipeline = self.get_data_transformer_object()
 
 
@@ -122,6 +128,13 @@ class DataTransformation:
             transformed_input_train_feature = transformed_input_train_feature.toarray()
             transformed_input_test_feature = transformed_input_test_feature.toarray()
 
+
+            target_feature_train_array = target_feature_train_array.reshape(-1,1)
+
+            target_feature_test_array = target_feature_test_array.reshape(-1,1)
+            
+            logging.info(transformed_input_train_feature.shape)
+            logging.info(target_feature_train_array.shape)
 
             # Concatenating features 
 
