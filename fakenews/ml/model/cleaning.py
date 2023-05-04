@@ -9,6 +9,15 @@ wnl = nltk.stem.WordNetLemmatizer()
 stop_words = stopwords.words('english')
 stopwords_dict = Counter(stop_words)
 
+def clean_text(text):
+    text = str(text).replace(r'http[\w:/\.]+', ' ')  # removing urls
+    text = str(text).replace(r'[^\.\w\s]', ' ')  # remove everything but characters and punctuation
+    text = str(text).replace('[^a-zA-Z]', ' ')
+    text = str(text).replace(r'\s\s+', ' ')
+    text = text.lower().strip()
+    # text = ' '.join(text)
+    return text
+
 def nltk_preprocess(text):
     text = clean_text(text)
     wordlist = re.sub(r'[^\w\s]', '', text).split()
